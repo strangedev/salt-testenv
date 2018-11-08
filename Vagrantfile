@@ -5,7 +5,7 @@ Vagrant.configure("2") do |config|
 		master.vm.box = "bento/ubuntu-18.04"
 		master.vm.hostname = "salt-master"
 
-		config.vm.network "private_network", ip: "10.0.0.100"
+		master.vm.network "private_network", ip: "192.168.137.100"
 
 		master.vm.provision "shell",
 			path: "provision/install_salt_master.sh"
@@ -30,11 +30,11 @@ Vagrant.configure("2") do |config|
 			ubuntu.vm.hostname = "ubuntu-#{i}"
 
 			if i  < 10
-				ipAddress = "10.0.0.3#{i}"
+				ipAddress = "192.168.137.3#{i}"
 			else
 				raise "Too many VMs!"
 			end
-			config.vm.network "private_network", ip: ipAddress
+			ubuntu.vm.network "private_network", ip: ipAddress
 			
 			ubuntu.vm.provision "shell",
 				path: "provision/install_salt_minion.sh"
