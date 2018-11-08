@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
 			privileged: true
 
 		master.vm.provision "shell",
-			path: "provision/ufw_allow_salt_master.sh"
+			path: "provision/ufw_allow_salt_master.sh",
 			privileged: true
 	end
 
