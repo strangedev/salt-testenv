@@ -1,0 +1,3 @@
+[submodule "dipf-devops-saltstack"]
+	path = dipf-devops-saltstack
+	url = git@github.com:strangedev/dipf-devops-saltstack.git
