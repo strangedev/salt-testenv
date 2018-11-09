@@ -9,6 +9,14 @@ Vagrant.configure("2") do |config|
 
 		master.vm.provision "shell",
 			path: "provision/install_salt_master.sh"
+		
+		master.vm.provision "file",
+			source: "dipf-devops-saltstack/.",
+			destination: "~/salt"
+
+		master.vm.provision "shell",
+			inline: "mv /home/vagrant/salt /srv/salt",
+			privileged: true		
 
 		master.vm.provision "file",
 			source: "provision/config/salt.ufw",
