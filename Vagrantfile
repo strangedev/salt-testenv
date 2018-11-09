@@ -15,7 +15,7 @@ Vagrant.configure("2") do |config|
 			destination: "~/salt"
 
 		master.vm.provision "shell",
-			inline: "mv /home/vagrant/salt /srv/salt",
+			inline: "rsync --remove-source-files -a -v /home/vagrant/salt /srv",
 			privileged: true		
 
 		master.vm.provision "file",
