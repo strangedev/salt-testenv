@@ -36,9 +36,11 @@ Vagrant.configure("2") do |config|
 	# create a bunch of ubuntu hosts
 	(1..1).each do |i|
 		config.vm.define "ubuntu-#{i}" do |ubuntu|
+			# base config
 			ubuntu.vm.box = "bento/ubuntu-18.04"
 			ubuntu.vm.hostname = "ubuntu-#{i}"
 
+			# network
 			if i  < 10
 				ipAddress = "192.168.137.3#{i}"
 			else
@@ -46,16 +48,19 @@ Vagrant.configure("2") do |config|
 			end
 			ubuntu.vm.network "private_network", ip: ipAddress
 			
-			ubuntu.vm.provision "shell",
-				path: "provision/install_salt_minion.sh"
+			# optionally install saltstack
+			if ARGV.length >= 1 and ARGV[0] == '--salt-bootstrap'
+				ubuntu.vm.provision "shell",
+					path: "provision/install_salt_minion.sh"
 
-			ubuntu.vm.provision "file",
-				source: "provision/config/minion",
-				destination: "~/minion"
+				ubuntu.vm.provision "file",
+					source: "provision/config/minion",
+					destination: "~/minion"
 
-			ubuntu.vm.provision "shell",
-				inline: "mv /home/vagrant/minion /etc/salt/minion",
-				privileged: true			
+				ubuntu.vm.provision "shell",
+					inline: "mv /home/vagrant/minion /etc/salt/minion",
+					privileged: true
+			end			
 		end
 	end
 end
