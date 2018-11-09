@@ -7,8 +7,10 @@ Vagrant.configure("2") do |config|
 
 		master.vm.network "private_network", ip: "192.168.137.100"
 
-		master.vm.provision "shell",
-			path: "provision/install_salt_master.sh"
+		if ARGV.length >= 1 and ARGV[0] == '--salt-bootstrap'
+			master.vm.provision "shell",
+				path: "provision/install_salt_master.sh"
+		end
 		
 		master.vm.provision "file",
 			source: "dipf-devops-saltstack/.",
