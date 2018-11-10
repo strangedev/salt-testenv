@@ -11,13 +11,29 @@ Vagrant.configure("2") do |config|
 			master.vm.provision "shell",
 				path: "provision/install_salt_master.sh"
 		end
+
+		master.vm.provision "file",
+			source: "provision/config/master",
+			destination: "~/master"
+
+		master.vm.provision "shell",
+			inline: "mv /home/vagrant/master /etc/salt/master",
+			privileged: true	
 		
 		master.vm.provision "file",
-			source: "dipf-devops-saltstack/.",
+			source: "dipf-devops-saltstack/states/.",
 			destination: "~/salt"
 
 		master.vm.provision "shell",
 			inline: "rsync --remove-source-files -a -v /home/vagrant/salt /srv",
+			privileged: true	
+
+		master.vm.provision "file",
+			source: "dipf-devops-saltstack/pillars/.",
+			destination: "~/pillar"
+
+		master.vm.provision "shell",
+			inline: "rsync --remove-source-files -a -v /home/vagrant/pillar /srv",
 			privileged: true		
 
 		master.vm.provision "file",
