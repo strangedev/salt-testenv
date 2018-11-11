@@ -7,7 +7,7 @@ Vagrant.configure("2") do |config|
 
 		master.vm.network "private_network", ip: "192.168.137.100"
 
-		if ARGV.length >= 1 and ARGV[0] == '--salt-bootstrap'
+		if ARGV.length >= 1 and ARGV[0] == '--salt-bootstrap' # TODO: this is broken
 			master.vm.provision "shell",
 				path: "provision/install_salt_master.sh"
 		end
@@ -23,6 +23,10 @@ Vagrant.configure("2") do |config|
 		master.vm.provision "file",
 			source: "dipf-devops-saltstack/states/.",
 			destination: "~/salt"
+
+		master.vm.provision "file",
+			source: "dipf-devops-saltstack/scripts/.",
+			destination: "~/salt/scripts"
 
 		master.vm.provision "shell",
 			inline: "rsync --remove-source-files -a -v /home/vagrant/salt /srv",
@@ -64,19 +68,22 @@ Vagrant.configure("2") do |config|
 			end
 			ubuntu.vm.network "private_network", ip: ipAddress
 			
-			# optionally install saltstack
-			if ARGV.length >= 1 and ARGV[0] == '--salt-bootstrap'
-				ubuntu.vm.provision "shell",
-					path: "provision/install_salt_minion.sh"
+			# install saltstack
+			
+			ubuntu.vm.provision "shell",
+				path: "provision/install_salt_minion.sh"
 
-				ubuntu.vm.provision "file",
-					source: "provision/config/minion",
-					destination: "~/minion"
+			ubuntu.vm.provision "file",
+				source: "provision/config/minion",
+				destination: "~/minion"
 
-				ubuntu.vm.provision "shell",
-					inline: "mv /home/vagrant/minion /etc/salt/minion",
-					privileged: true
-			end			
+			ubuntu.vm.provision "shell",
+				inline: "mv /home/vagrant/minion /etc/salt/minion",
+				privileged: true
+
+			ubuntu.vm.provision "shell",
+				inline: "systemctl restart salt-minion",
+				privileged: true			
 		end
 	end
 end
