@@ -28,6 +28,14 @@ Vagrant.configure("2") do |config|
 			source: "dipf-devops-saltstack/scripts/.",
 			destination: "~/salt/scripts"
 
+		master.vm.provision "file",
+			source: "dipf-devops-saltstack/ssh-keys/.",
+			destination: "~/salt/ssh-keys"
+
+		master.vm.provision "file",
+			source: "dipf-devops-saltstack/config/.",
+			destination: "~/salt/config"
+
 		master.vm.provision "shell",
 			inline: "rsync --remove-source-files -a -v /home/vagrant/salt /srv",
 			privileged: true	
