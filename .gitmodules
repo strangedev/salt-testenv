@@ -1,3 +1,6 @@
 [submodule "saltstack-states"]
 	path = saltstack-states
 	url = git@github.com:EducationalTechnologies/saltstack-states.git
+[submodule "saltstack-data-examples"]
+	path = saltstack-data-examples
+	url = git@github.com:EducationalTechnologies/saltstack-data-examples.git
