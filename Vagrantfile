@@ -23,22 +23,14 @@ Vagrant.configure("2") do |config|
 		# transfer salt states
 
 		master.vm.provision "file",
-			source: "dipf-devops-saltstack/states/.",
+			source: "saltstack-states/.",
 			destination: "~/salt"
 
 		# transfer config data
 
 		master.vm.provision "file",
-			source: "dipf-devops-saltstack/data.example/scripts/.",
-			destination: "~/salt/scripts"
-
-		master.vm.provision "file",
-			source: "dipf-devops-saltstack/data.example/ssh-keys/.",
-			destination: "~/salt/ssh-keys"
-
-		master.vm.provision "file",
-			source: "dipf-devops-saltstack/data.example/config/.",
-			destination: "~/salt/config"
+			source: "saltstack-data-examples/.",
+			destination: "~/salt"
 
 		# move data, states to salt master's file_roots
 
@@ -49,7 +41,7 @@ Vagrant.configure("2") do |config|
 		# transfer pillars
 
 		master.vm.provision "file",
-			source: "dipf-devops-saltstack/pillar.example/.",
+			source: "saltstack-pillar-examples/.",
 			destination: "~/pillar"
 
 		# move pillars to master's pillar_roots
