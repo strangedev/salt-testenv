@@ -1,0 +1,3 @@
+[submodule "saltstack-states"]
+	path = saltstack-states
+	url = git@github.com:EducationalTechnologies/saltstack-states.git
