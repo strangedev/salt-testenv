@@ -25,15 +25,15 @@ Vagrant.configure("2") do |config|
 			destination: "~/salt"
 
 		master.vm.provision "file",
-			source: "dipf-devops-saltstack/scripts/.",
+			source: "dipf-devops-saltstack/data.example/scripts/.",
 			destination: "~/salt/scripts"
 
 		master.vm.provision "file",
-			source: "dipf-devops-saltstack/ssh-keys/.",
+			source: "dipf-devops-saltstack/data.example/ssh-keys/.",
 			destination: "~/salt/ssh-keys"
 
 		master.vm.provision "file",
-			source: "dipf-devops-saltstack/config/.",
+			source: "dipf-devops-saltstack/data.example/config/.",
 			destination: "~/salt/config"
 
 		master.vm.provision "shell",
@@ -41,7 +41,7 @@ Vagrant.configure("2") do |config|
 			privileged: true	
 
 		master.vm.provision "file",
-			source: "dipf-devops-saltstack/pillars/.",
+			source: "dipf-devops-saltstack/pillar.example/.",
 			destination: "~/pillar"
 
 		master.vm.provision "shell",
@@ -59,6 +59,24 @@ Vagrant.configure("2") do |config|
 		master.vm.provision "shell",
 			path: "provision/ufw_allow_salt_master.sh",
 			privileged: true
+	
+		if ARGV.length >= 1 and ARGV[0] == '--salt-bootstrap' # TODO: this is broken
+			master.vm.provision "shell",
+					path: "provision/install_salt_minion.sh"
+
+			master.vm.provision "file",
+				source: "provision/config/minion",
+				destination: "~/minion"
+
+			master.vm.provision "shell",
+				inline: "mv /home/vagrant/minion /etc/salt/minion",
+				privileged: true
+
+			master.vm.provision "shell",
+				inline: "systemctl restart salt-minion",
+				privileged: true			
+		end
+
 	end
 
 	# create a bunch of ubuntu hosts
