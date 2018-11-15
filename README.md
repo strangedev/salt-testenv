@@ -19,14 +19,6 @@ vagrant up
 
 ## Saltstack
 
-### Install saltstack
-
-Provision saltstack with:
-
-```bash
-vagrant provision salt-master --salt-bootstrap
-```
-
 ### Connect minions to master
 
 First, ssh into the salt-master:
