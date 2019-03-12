@@ -38,3 +38,38 @@ Then, accept the minions by using:
 ```bash
 sudo salt-key --accept-all
 ```
+
+## Tips & Tricks
+
+### Shutting down Vagrant Boxes if the Vagrantfile has changed
+
+When using VirtualBox as hypervisor:
+
+```bash
+VBoxManage list runningvms
+VBoxManage controlvm <name|uuid> acpipowerbutton
+```
+
+If the box is unresponsive, you may force a poweroff (_may cause data loss in the VM guest!_):
+
+```bash
+VBoxManage list runningvms
+VBoxManage controlvm <name|uuid> poweroff
+```
+
+### Removing orphaned Vagrant VMs
+
+When using VirtualBox as hypervisor:
+
+```bash
+VBoxManage list vms
+VBoxManage unregistervm <name|uuid> --delete
+```
+
+If you like to live dangerously (_removes ALL VirtualBox VMs!_):
+
+```bash
+for vmId in $( VBoxManage list vms | sed 's/\s\+/\t/' | cut -f2 | sed 's/[{}]//g' ); do
+	VBoxManage unregistervm "$vmId" --delete
+done
+```
