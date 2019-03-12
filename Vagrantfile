@@ -1,6 +1,13 @@
 baseBox = "debian/stretch64"
+numCPUs = 2
+memoryKb = 1024
 
 Vagrant.configure("2") do |config|
+
+	config.vm.provider "virtualbox" do |v|
+		v.memory = numCPUs
+		v.cpus = memoryKb
+	end
 
 	# create 1 salt master
 	config.vm.define "salt-master" do |master|
