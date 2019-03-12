@@ -1,13 +1,18 @@
+baseBox = "debian/stretch64"
+
 Vagrant.configure("2") do |config|
 
 	# create 1 salt master
 	config.vm.define "salt-master" do |master|
-		master.vm.box = "bento/ubuntu-18.04"
+		master.vm.box = baseBox
 		master.vm.hostname = "salt-master"
 
 		master.vm.network "private_network", ip: "192.168.137.100"
 
 		# install salt master
+		master.vm.provision "shell",
+			inline: "apt install -y curl",
+			privileged: true
 
 		master.vm.provision "shell",
 			path: "provision/install_salt_master.sh"
@@ -20,38 +25,7 @@ Vagrant.configure("2") do |config|
 			inline: "mv /home/vagrant/master /etc/salt/master",
 			privileged: true
 
-		# transfer salt states
-
-		master.vm.provision "file",
-			source: "saltstack-states/.",
-			destination: "~/salt"
-
-		# transfer config data
-
-		master.vm.provision "file",
-			source: "saltstack-data-examples/.",
-			destination: "~/salt"
-
-		# move data, states to salt master's file_roots
-
-		master.vm.provision "shell",
-			inline: "rsync --remove-source-files -a -v /home/vagrant/salt /srv",
-			privileged: true	
-
-		# transfer pillars
-
-		master.vm.provision "file",
-			source: "saltstack-pillar-examples/.",
-			destination: "~/pillar"
-
-		# move pillars to master's pillar_roots
-
-		master.vm.provision "shell",
-			inline: "rsync --remove-source-files -a -v /home/vagrant/pillar /srv",
-			privileged: true		
-
-		# setup firewall rules for salt master
-
+		# set up firewall rules for salt master
 		master.vm.provision "file",
 			source: "provision/config/salt.ufw",
 			destination: "~/salt.ufw"
@@ -65,7 +39,6 @@ Vagrant.configure("2") do |config|
 			privileged: true
 
 		# install salt minion
-	
 		master.vm.provision "shell",
 			path: "provision/install_salt_minion.sh"
 
@@ -79,16 +52,15 @@ Vagrant.configure("2") do |config|
 
 		master.vm.provision "shell",
 			inline: "systemctl restart salt-minion",
-			privileged: true			
-
+			privileged: true
 	end
 
-	# create a bunch of ubuntu hosts
+	# create a bunch of minions
 	(1..1).each do |i|
-		config.vm.define "ubuntu-#{i}" do |ubuntu|
+		config.vm.define "salt-minion-#{i}" do |ubuntu|
 			# base config
-			ubuntu.vm.box = "bento/ubuntu-18.04"
-			ubuntu.vm.hostname = "ubuntu-#{i}"
+			ubuntu.vm.box = baseBox
+			ubuntu.vm.hostname = "salt-minion-#{i}"
 
 			# network
 			if i  < 10
@@ -98,8 +70,11 @@ Vagrant.configure("2") do |config|
 			end
 			ubuntu.vm.network "private_network", ip: ipAddress
 			
+			ubuntu.vm.provision "shell",
+				inline: "apt install -y curl",
+				privileged: true
+
 			# install salt minion
-			
 			ubuntu.vm.provision "shell",
 				path: "provision/install_salt_minion.sh"
 

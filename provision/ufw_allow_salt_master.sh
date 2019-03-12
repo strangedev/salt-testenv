@@ -1,4 +1,7 @@
 #!/bin/bash
 chown root:root /etc/ufw/applications.d/salt.ufw
-ufw app update salt
-ufw allow salt
+which ufw
+if [ $? -eq 0 ]; then
+	ufw app update salt
+	ufw allow salt
+fi
