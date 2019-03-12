@@ -5,8 +5,8 @@ memoryKb = 1024
 Vagrant.configure("2") do |config|
 
 	config.vm.provider "virtualbox" do |v|
-		v.memory = numCPUs
-		v.cpus = memoryKb
+		v.memory = memoryKb
+		v.cpus = numCPUs
 	end
 
 	# create 1 salt master
