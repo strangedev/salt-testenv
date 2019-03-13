@@ -39,6 +39,34 @@ Then, accept the minions by using:
 sudo salt-key --accept-all
 ```
 
+### Fix shared folder permissions
+
+Salt won't recognise the states in `/vagrant`, unless `root`
+has ownership over them. 
+
+```bash
+sudo chown -R root:root /vagrant
+sudo systemctl restart salt-master
+```
+
+### Run with longer timeout
+
+Sometimes, when executing long-running jobs, the salt CLI will time out
+before retrieving data from the minions (Message: Minion did not return. [No response]).
+You may increase this timeout by passing the `-t` flag to salt:
+
+```bash
+salt -t 60 '*' test.ping  # waits for 60 seconds
+```
+
+### Check order of execution
+
+To display a dependency tree for a certain salt state, use the following command (this will also find syntax errors):
+
+```bash
+salt '*' state.show_sls <name>
+```
+
 ### Dry run
 
 ```bash
