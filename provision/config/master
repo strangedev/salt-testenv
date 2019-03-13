@@ -6,3 +6,5 @@ file_roots:
 pillar_roots:
   base:
     - /vagrant/saltstack-pillar-examples
+
+timeout: 30
