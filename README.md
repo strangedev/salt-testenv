@@ -39,6 +39,12 @@ Then, accept the minions by using:
 sudo salt-key --accept-all
 ```
 
+### Dry run
+
+```bash
+salt '*' state.apply <name> test=True
+```
+
 ## Tips & Tricks
 
 ### Shutting down Vagrant Boxes if the Vagrantfile has changed
