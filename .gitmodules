@@ -1,9 +1,9 @@
 [submodule "saltstack-states"]
 	path = saltstack-states
-	url = https://github.com/EducationalTechnologies/saltstack-states.git
+	url = https://github.com/strangdev/salt-states.git
 [submodule "saltstack-data-examples"]
 	path = saltstack-data-examples
-	url = https://github.com/EducationalTechnologies/saltstack-data-examples.git
+	url = https://github.com/strangedev/salt-data.git
 [submodule "saltstack-pillar-examples"]
 	path = saltstack-pillar-examples
-	url = https://@github.com/EducationalTechnologies/saltstack-pillar-examples.git
+	url = https://@github.com/strangedev/salt-pillars.git
