@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-numCPUs = 2
+numCPUs = 1
 memoryKb = 1024
 
 Vagrant.configure("2") do |config|
@@ -17,12 +17,19 @@ Vagrant.configure("2") do |config|
 		owner: "root",
 		group: "root"
 
-  	config.vm.define "core" do |master|
-		master.vm.box = "swarm-core"
-		master.vm.hostname = "core"
+  	config.vm.define "core" do |core|
+		core.vm.box = "swarm-core"
+		core.vm.hostname = "core"
 
-		master.vm.network "private_network", ip: "192.168.137.100"
+		core.vm.network "private_network", 
+			ip: "192.168.137.100"
+	end
 
-		
+	config.vm.define "compute" do |compute|
+		compute.vm.box = "swarm-compute"
+		compute.vm.hostname = "compute-0"
+
+		compute.vm.network "private_network",
+			ip: "192.168.137.201"
 	end
 end
