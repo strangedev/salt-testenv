@@ -1,10 +1,10 @@
 file_roots:
   base:
-    - /vagrant/saltstack-states
-    - /vagrant/saltstack-data-examples
+    - /vagrant/states
+    - /vagrant/data
 
 pillar_roots:
   base:
-    - /vagrant/saltstack-pillar-examples
+    - /vagrant/pillars
 
 timeout: 30
